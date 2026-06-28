@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大学生社交行为问卷</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="page">
+    <section class="survey-shell">
+      <header class="survey-header">
+        <p class="eyebrow">匿名问卷</p>
+        <h1>大学生社交行为问卷</h1>
+        <p class="intro">请根据你的真实情况填写。所有题目均为必填，第 4 题需且只能选择 2 项。</p>
+      </header>
+
+      <form id="surveyForm" novalidate>
+        <section class="section-block">
+          <h2>第一部分：基本信息</h2>
+          <div class="question" data-name="q1">
+            <h3>1. 你的年级是？</h3>
+            <label><input type="radio" name="q1" value="A. 大一" required> A. 大一</label>
+            <label><input type="radio" name="q1" value="B. 大二"> B. 大二</label>
+            <label><input type="radio" name="q1" value="C. 大三"> C. 大三</label>
+            <label><input type="radio" name="q1" value="D. 大四"> D. 大四</label>
+          </div>
+
+          <div class="question" data-name="q2">
+            <h3>2. 你的性别是？</h3>
+            <label><input type="radio" name="q2" value="A. 男" required> A. 男</label>
+            <label><input type="radio" name="q2" value="B. 女"> B. 女</label>
+          </div>
+
+          <div class="question" data-name="q3">
+            <h3>3. 你平均每天使用社交类App的大致时间是？</h3>
+            <label><input type="radio" name="q3" value="A. 1小时以内" required> A. 1小时以内</label>
+            <label><input type="radio" name="q3" value="B. 1—3小时"> B. 1—3小时</label>
+            <label><input type="radio" name="q3" value="C. 3—5小时"> C. 3—5小时</label>
+            <label><input type="radio" name="q3" value="D. 5—7小时"> D. 5—7小时</label>
+            <label><input type="radio" name="q3" value="E. 7小时以上"> E. 7小时以上</label>
+          </div>
+
+          <div class="question" data-name="q4">
+            <h3>4. 你平时使用最多的两个社交平台是？（选2项）</h3>
+            <label><input type="checkbox" name="q4" value="A. 微信"> A. 微信</label>
+            <label><input type="checkbox" name="q4" value="B. QQ"> B. QQ</label>
+            <label><input type="checkbox" name="q4" value="C. 抖音"> C. 抖音</label>
+            <label><input type="checkbox" name="q4" value="D. 小红书"> D. 小红书</label>
+            <label><input type="checkbox" name="q4" value="E. 微博"> E. 微博</label>
+            <label><input type="checkbox" name="q4" value="F. 其他"> F. 其他</label>
+            <p class="hint">已选择 <span id="q4Count">0</span>/2 项</p>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <h2>第二部分：虚拟社交行为（线上）</h2>
+          <div class="question" data-name="q5">
+            <h3>5. 你在线上社交时，最主要的目的通常是？</h3>
+            <label><input type="radio" name="q5" value="A. 打发时间/消遣" required> A. 打发时间/消遣</label>
+            <label><input type="radio" name="q5" value="B. 获取信息/了解动态"> B. 获取信息/了解动态</label>
+            <label><input type="radio" name="q5" value="C. 和熟人保持联系"> C. 和熟人保持联系</label>
+            <label><input type="radio" name="q5" value="D. 结识新朋友"> D. 结识新朋友</label>
+            <label><input type="radio" name="q5" value="E. 表达情绪/宣泄压力"> E. 表达情绪/宣泄压力</label>
+          </div>
+
+          <div class="question" data-name="q6">
+            <h3>6. 你在网上和人聊天时，会不会刻意让自己显得比现实中更优秀或更有趣？</h3>
+            <label><input type="radio" name="q6" value="A. 经常会" required> A. 经常会</label>
+            <label><input type="radio" name="q6" value="B. 偶尔会"> B. 偶尔会</label>
+            <label><input type="radio" name="q6" value="C. 基本不会"> C. 基本不会</label>
+            <label><input type="radio" name="q6" value="D. 完全不会"> D. 完全不会</label>
+          </div>
+
+          <div class="question" data-name="q7">
+            <h3>7. 你在网上是否有过“这个人聊得挺好，但感觉还不是真朋友”的感觉？</h3>
+            <label><input type="radio" name="q7" value="A. 经常有" required> A. 经常有</label>
+            <label><input type="radio" name="q7" value="B. 偶尔有"> B. 偶尔有</label>
+            <label><input type="radio" name="q7" value="C. 很少有"> C. 很少有</label>
+            <label><input type="radio" name="q7" value="D. 没有这种感觉"> D. 没有这种感觉</label>
+          </div>
+
+          <div class="question" data-name="q8">
+            <h3>8. 如果在网上和某人发生了争执或不愉快，你通常怎么处理？</h3>
+            <label><input type="radio" name="q8" value="A. 直接拉黑/删除/退群" required> A. 直接拉黑/删除/退群</label>
+            <label><input type="radio" name="q8" value="B. 不回复消息，冷处理"> B. 不回复消息，冷处理</label>
+            <label><input type="radio" name="q8" value="C. 继续争论，把话说清楚"> C. 继续争论，把话说清楚</label>
+            <label><input type="radio" name="q8" value="D. 主动道歉或缓和关系"> D. 主动道歉或缓和关系</label>
+          </div>
+
+          <div class="question" data-name="q9">
+            <h3>9. 你在网上是否向不太熟的人倾诉过心里话或隐私？</h3>
+            <label><input type="radio" name="q9" value="A. 有过，而且不止一次" required> A. 有过，而且不止一次</label>
+            <label><input type="radio" name="q9" value="B. 有过一两次"> B. 有过一两次</label>
+            <label><input type="radio" name="q9" value="C. 从来没有"> C. 从来没有</label>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <h2>第三部分：现实社交行为（线下）</h2>
+          <div class="question" data-name="q10">
+            <h3>10. 你在现实中和人面对面交往时，最主要的目的通常是？</h3>
+            <label><input type="radio" name="q10" value="A. 消磨时间/凑热闹" required> A. 消磨时间/凑热闹</label>
+            <label><input type="radio" name="q10" value="B. 交流信息/商量事情"> B. 交流信息/商量事情</label>
+            <label><input type="radio" name="q10" value="C. 维护朋友关系"> C. 维护朋友关系</label>
+            <label><input type="radio" name="q10" value="D. 寻求情感支持或陪伴"> D. 寻求情感支持或陪伴</label>
+          </div>
+
+          <div class="question" data-name="q11">
+            <h3>11. 你在现实中面对陌生人或不熟的人时，和网上相比，表现出的性格？</h3>
+            <label><input type="radio" name="q11" value="A. 更外向放得开" required> A. 更外向放得开</label>
+            <label><input type="radio" name="q11" value="B. 差不多"> B. 差不多</label>
+            <label><input type="radio" name="q11" value="C. 更内向拘谨"> C. 更内向拘谨</label>
+          </div>
+
+          <div class="question" data-name="q12">
+            <h3>12. 在现实中，你大概有多少个可以借钱或深夜打电话求助的朋友？</h3>
+            <label><input type="radio" name="q12" value="A. 0个" required> A. 0个</label>
+            <label><input type="radio" name="q12" value="B. 1-2个"> B. 1-2个</label>
+            <label><input type="radio" name="q12" value="C. 3-5个"> C. 3-5个</label>
+            <label><input type="radio" name="q12" value="D. 5个以上"> D. 5个以上</label>
+          </div>
+
+          <div class="question" data-name="q13">
+            <h3>13. 如果在现实中和朋友发生了矛盾，你通常怎么处理？</h3>
+            <label><input type="radio" name="q13" value="A. 冷处理，等对方来找我" required> A. 冷处理，等对方来找我</label>
+            <label><input type="radio" name="q13" value="B. 找个中间人传话/调解"> B. 找个中间人传话/调解</label>
+            <label><input type="radio" name="q13" value="C. 约出来当面把话说清楚"> C. 约出来当面把话说清楚</label>
+            <label><input type="radio" name="q13" value="D. 主动让步或道歉"> D. 主动让步或道歉</label>
+          </div>
+
+          <div class="question" data-name="q14">
+            <h3>14. 你觉得现实中的朋友关系和网上的朋友关系相比，深度上有什么区别？</h3>
+            <label><input type="radio" name="q14" value="A. 现实朋友明显更深" required> A. 现实朋友明显更深</label>
+            <label><input type="radio" name="q14" value="B. 差不多"> B. 差不多</label>
+            <label><input type="radio" name="q14" value="C. 网上朋友反而更深"> C. 网上朋友反而更深</label>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <h2>第四部分：对比判断</h2>
+          <div class="question" data-name="q15">
+            <h3>15. 下面几种情况，哪种你最有同感？</h3>
+            <label><input type="radio" name="q15" value="A. 有些话在网上敢说，当面说不出口" required> A. 有些话在网上敢说，当面说不出口</label>
+            <label><input type="radio" name="q15" value="B. 有些话当面敢说，在网上反而说不出口"> B. 有些话当面敢说，在网上反而说不出口</label>
+            <label><input type="radio" name="q15" value="C. 两种情况下我说话都差不多，没有明显区别"> C. 两种情况下我说话都差不多，没有明显区别</label>
+          </div>
+
+          <div class="question" data-name="q16">
+            <h3>16. 如果有机会重新分配你的社交时间（线上vs线下），你会？</h3>
+            <label><input type="radio" name="q16" value="A. 增加线下社交，减少线上" required> A. 增加线下社交，减少线上</label>
+            <label><input type="radio" name="q16" value="B. 保持不变"> B. 保持不变</label>
+            <label><input type="radio" name="q16" value="C. 增加线上，减少线下"> C. 增加线上，减少线下</label>
+          </div>
+
+          <div class="question" data-name="q17">
+            <h3>17. 你觉得“线上聊得热络、线下见面尴尬”这种现象，在你身上？</h3>
+            <label><input type="radio" name="q17" value="A. 经常发生" required> A. 经常发生</label>
+            <label><input type="radio" name="q17" value="B. 偶尔发生"> B. 偶尔发生</label>
+            <label><input type="radio" name="q17" value="C. 很少发生"> C. 很少发生</label>
+            <label><input type="radio" name="q17" value="D. 没发生过"> D. 没发生过</label>
+          </div>
+        </section>
+
+        <div class="actions">
+          <p id="formMessage" class="form-message" aria-live="polite"></p>
+          <button id="submitButton" type="submit" disabled>提交问卷</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/survey.js"></script>
+</body>
+</html>

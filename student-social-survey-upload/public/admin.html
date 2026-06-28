@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>问卷记录管理</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="page admin-page">
+    <section class="survey-shell admin-shell">
+      <header class="survey-header admin-header">
+        <p class="eyebrow">管理员端</p>
+        <h1>问卷提交记录</h1>
+        <p class="intro">输入管理员密码后查看所有记录。普通填写页面不会暴露任何历史数据。</p>
+      </header>
+
+      <section id="loginPanel" class="login-panel">
+        <label for="passwordInput">管理员密码</label>
+        <div class="login-row">
+          <input id="passwordInput" type="password" placeholder="请输入密码" autocomplete="current-password">
+          <button id="loginButton" type="button">进入</button>
+        </div>
+        <p id="loginMessage" class="form-message" aria-live="polite"></p>
+      </section>
+
+      <section id="resultPanel" class="result-panel hidden">
+        <div class="table-toolbar">
+          <span id="recordCount"></span>
+          <button id="logoutButton" type="button" class="ghost-button">退出</button>
+        </div>
+        <p id="emptyState" class="empty-state hidden">暂无提交记录</p>
+        <div id="tableWrap" class="table-wrap hidden">
+          <table>
+            <thead>
+              <tr>
+                <th>提交时间</th>
+                <th>1. 年级</th>
+                <th>2. 性别</th>
+                <th>3. 使用时长</th>
+                <th>4. 社交平台</th>
+                <th>5. 线上目的</th>
+                <th>6. 线上形象</th>
+                <th>7. 真朋友感受</th>
+                <th>8. 线上争执处理</th>
+                <th>9. 隐私倾诉</th>
+                <th>10. 线下目的</th>
+                <th>11. 线下性格</th>
+                <th>12. 求助朋友数</th>
+                <th>13. 线下矛盾处理</th>
+                <th>14. 关系深度</th>
+                <th>15. 表达差异</th>
+                <th>16. 时间分配</th>
+                <th>17. 见面尴尬</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="/admin.js"></script>
+</body>
+</html>
