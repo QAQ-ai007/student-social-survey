@@ -1,0 +1,13 @@
+{
+  "name": "student-social-survey",
+  "version": "1.0.0",
+  "description": "大学生社交行为问卷网站",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.13.1"
+  }
+}
