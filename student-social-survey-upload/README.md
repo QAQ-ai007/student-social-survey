@@ -54,6 +54,21 @@ disable-auto-public-start.bat
 - `POST /api/login`：管理员密码验证
 - `GET /api/results`：管理员获取所有提交记录，需携带登录后返回的 token
 
+## Render 长期保存数据
+
+推荐使用 Supabase 免费 PostgreSQL 数据库。
+
+1. 在 Supabase 创建项目。
+2. 在项目的 Database / Connection string 中复制 URI 格式连接串。
+3. 在 Render 的 Environment Variables 中添加：
+
+```text
+DATABASE_URL=你的 Supabase PostgreSQL 连接串
+ADMIN_PASSWORD=123456
+```
+
+部署后程序会自动创建 `survey_responses` 表。配置了 `DATABASE_URL` 时，所有问卷提交都会保存到 PostgreSQL；本地运行或没有配置数据库时，会继续保存到 `data.json`。
+
 ## 文件结构
 
 ```text

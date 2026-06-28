@@ -1,11 +1,22 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const ADMIN_PASSWORD = '123456';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '123456';
 const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, 'data.json');
+const DATABASE_URL = process.env.DATABASE_URL;
+
+const requiredFields = Array.from({ length: 17 }, (_, index) => `q${index + 1}`);
+
+const pool = DATABASE_URL
+  ? new Pool({
+      connectionString: DATABASE_URL,
+      ssl: process.env.PGSSLMODE === 'disable' ? false : { rejectUnauthorized: false }
+    })
+  : null;
 
 function ensureDataFile() {
   if (!fs.existsSync(DATA_FILE)) {
@@ -13,7 +24,7 @@ function ensureDataFile() {
   }
 }
 
-function readData() {
+function readFileData() {
   ensureDataFile();
   try {
     const raw = fs.readFileSync(DATA_FILE, 'utf8');
@@ -24,11 +35,54 @@ function readData() {
   }
 }
 
-function writeData(records) {
+function writeFileData(records) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(records, null, 2), 'utf8');
 }
 
-const requiredFields = Array.from({ length: 17 }, (_, index) => `q${index + 1}`);
+async function initStorage() {
+  if (!pool) {
+    ensureDataFile();
+    return;
+  }
+
+  await pool.query(`
+    create table if not exists survey_responses (
+      id bigserial primary key,
+      timestamp timestamptz not null default now(),
+      data jsonb not null
+    )
+  `);
+}
+
+async function saveRecord(record) {
+  if (!pool) {
+    const records = readFileData();
+    records.push(record);
+    writeFileData(records);
+    return;
+  }
+
+  const { timestamp, ...answers } = record;
+  await pool.query(
+    'insert into survey_responses (timestamp, data) values ($1, $2)',
+    [timestamp, answers]
+  );
+}
+
+async function getRecords() {
+  if (!pool) {
+    return readFileData().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  }
+
+  const result = await pool.query(
+    'select timestamp, data from survey_responses order by timestamp desc'
+  );
+
+  return result.rows.map((row) => ({
+    timestamp: row.timestamp instanceof Date ? row.timestamp.toISOString() : row.timestamp,
+    ...row.data
+  }));
+}
 
 function validateSubmission(body) {
   for (const field of requiredFields) {
@@ -47,8 +101,6 @@ function validateSubmission(body) {
   return true;
 }
 
-ensureDataFile();
-
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -60,24 +112,26 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
-app.post('/submit', (req, res) => {
-  if (!validateSubmission(req.body)) {
-    return res.status(400).json({ success: false, message: '请完整填写问卷，第4题需且只能选择2项。' });
+app.post('/submit', async (req, res) => {
+  try {
+    if (!validateSubmission(req.body)) {
+      return res.status(400).json({ success: false, message: '请完整填写问卷，第4题需且只能选择2项。' });
+    }
+
+    const record = {
+      timestamp: new Date().toISOString()
+    };
+
+    for (const field of requiredFields) {
+      record[field] = field === 'q4' ? req.body[field] : req.body[field].trim();
+    }
+
+    await saveRecord(record);
+    return res.json({ success: true, message: '提交成功' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: '提交失败，请稍后再试。' });
   }
-
-  const records = readData();
-  const record = {
-    timestamp: new Date().toISOString()
-  };
-
-  for (const field of requiredFields) {
-    record[field] = field === 'q4' ? req.body[field] : req.body[field].trim();
-  }
-
-  records.push(record);
-  writeData(records);
-
-  return res.json({ success: true, message: '提交成功' });
 });
 
 app.post('/api/login', (req, res) => {
@@ -88,18 +142,31 @@ app.post('/api/login', (req, res) => {
   return res.status(401).json({ success: false, message: '密码错误' });
 });
 
-app.get('/api/results', (req, res) => {
-  const authHeader = req.get('Authorization') || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+app.get('/api/results', async (req, res) => {
+  try {
+    const authHeader = req.get('Authorization') || '';
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
 
-  if (token !== ADMIN_PASSWORD) {
-    return res.status(401).json({ success: false, message: '未授权访问' });
+    if (token !== ADMIN_PASSWORD) {
+      return res.status(401).json({ success: false, message: '未授权访问' });
+    }
+
+    const records = await getRecords();
+    return res.json({ success: true, data: records });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: '获取数据失败，请稍后再试。' });
   }
-
-  const records = readData().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  return res.json({ success: true, data: records });
 });
 
-app.listen(PORT, () => {
-  console.log(`问卷网站已启动：http://localhost:${PORT}`);
-});
+initStorage()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`问卷网站已启动：http://localhost:${PORT}`);
+      console.log(pool ? '当前使用 PostgreSQL 数据库存储。' : `当前使用本地文件存储：${DATA_FILE}`);
+    });
+  })
+  .catch((error) => {
+    console.error('服务启动失败：', error);
+    process.exit(1);
+  });
